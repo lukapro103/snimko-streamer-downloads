@@ -1,0 +1,36 @@
+name: Deploy Snimko installer to GitHub Pages
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare versioned installer
+        run: |
+          mkdir -p public/releases/1.0.0
+          curl -fL https://github.com/lukapro103/snimko-streamer-downloads/releases/download/v1.0.0/SnimkoSetup-1.0.0-x64.exe -o public/releases/1.0.0/SnimkoSetup-1.0.0-x64.exe
+          printf "Snimko Streamer downloads" > public/index.html
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
