@@ -22,10 +22,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Prepare versioned installer
+      - name: Prepare versioned downloads
         run: |
           mkdir -p public/releases/1.0.0
           curl -fL https://github.com/lukapro103/snimko-streamer-downloads/releases/download/v1.0.0/SnimkoSetup-1.0.0-x64.exe -o public/releases/1.0.0/SnimkoSetup-1.0.0-x64.exe
+          curl -fL https://github.com/lukapro103/snimko-streamer-downloads/releases/download/v1.0.0/SnimkoDemo.exe -o public/releases/1.0.0/SnimkoDemo.exe
           printf "Snimko Streamer downloads" > public/index.html
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
